@@ -1,0 +1,33 @@
+POST http://localhost:8000/api/auth/register/
+Content-Type: application/json
+
+{
+  "username": "test4",
+  "email": "test4@qwe.com",
+  "password": "test4"
+}
+
+###
+
+POST http://localhost:8000/api/auth/login/
+Content-Type: application/json
+
+{
+  "username": "test1",
+  "password": "test1"
+}
+
+###
+
+GET http://127.0.0.1:8000/api/cards/
+
+###
+
+POST http://localhost:8000/api/cards/
+Authorization: Token 0ff368109fadc14ade8e760480d528a5e94ede6f
+Content-Type: application/json
+
+{
+  "color": "yellow",
+  "price": "222"
+}
