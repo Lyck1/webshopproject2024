@@ -38,7 +38,7 @@ export default function App() {
                 <form onSubmit={loginFunction}>
                     <input type="text" id="username" placeholder={"Username"} ref={usernameRef} required/><br/><br/>
                     <input type="password" id="password" placeholder="Enter Password" ref={passwordRef} required/><br/><br/>
-                    <input type="submit" value="login"/>
+                    <input type="submit" value="Login"/>
                 </form>
             </div>
         </div>

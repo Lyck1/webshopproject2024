@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ['id', 'color', 'description', 'price', 'created_at']
+        fields = ['id', 'color', 'description', 'price', 'created_at', 'user_id']
 
 class UserWithCardSerializer(serializers.ModelSerializer):
     cards=CardSerializer(many=True,read_only=True)

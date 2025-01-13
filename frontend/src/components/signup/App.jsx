@@ -39,7 +39,7 @@ export default function App() {
                     <input type="text" id="username" placeholder={"Enter Username"} ref={usernameRef} required/><br/><br/>
                     <input type="email" id="email" placeholder="Enter Email" ref={emailRef} required/><br/><br/>
                     <input type="password" id="password" placeholder="Enter Password" ref={passwordRef} required/><br/><br/>
-                    <input type="submit" value="login"/>
+                    <input type="submit" value="Create Account"/>
                 </form>
             </div>
         </div>

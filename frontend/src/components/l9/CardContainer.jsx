@@ -8,6 +8,7 @@ export default function CardContainer(props) {
       price={card.price}
       description={card.description}
       created_at={card.created_at}
+      user_id={card.user_id}
       addToBasket={props.addToBasket}
       basketItems={props.basket}
     />

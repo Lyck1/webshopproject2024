@@ -10,7 +10,7 @@ export default function Label({ lColor, price, descr, createdAt }){
 
     return (
         <div style={lStyle}>
-            {lColor.split('_')[1]}
+            {lColor}
             <br/>
             {descr}
             <br/>

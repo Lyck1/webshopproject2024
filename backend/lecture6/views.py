@@ -3,10 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .models import Card
 from .serializers import CardSerializer, UserWithCardSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from django.contrib.auth.models import User
 class CardListAPIView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -101,3 +102,10 @@ def user_cards_api(request, username):
         return Response(serializer.data)
     except User.DoesNotExist:
         return Response({"error":"User not found"},status=404)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def verify_token(request):
+    user = request.user
+    return Response({"isValid": True, "userId": user.id}, status=status.HTTP_200_OK)

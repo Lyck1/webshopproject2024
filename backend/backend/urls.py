@@ -29,4 +29,5 @@ urlpatterns = [
     path('api/user-cards/<str:username>/',l6views.user_cards_api, name='user-cards-api'),
     path('api/auth/register/', l8views.RegisterUserAPI.as_view(), name='register'),
     path('api/auth/login/', obtain_auth_token, name='login'),
+    path('api/auth/verify-token', l6views.verify_token, name='verify-token')
 ]

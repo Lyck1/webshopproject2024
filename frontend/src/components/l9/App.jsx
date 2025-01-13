@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Basket from "./Basket";
 import { useRef } from "react";
@@ -6,7 +6,9 @@ import CardContainer from "../l9/CardContainer";
 
 export default function App() {
   const [cards, setCards] = useState([]);
-  const inputRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const priceRef = useRef(null);
   const [isAddedToggle, setAdded] = useState(false);
   const [isPopulate, setPopulate] = useState(false);
   const getBasketFromLocalStorage = () => {
@@ -15,15 +17,14 @@ export default function App() {
   };
 
   const [basket, setBasket] = useState(getBasketFromLocalStorage);
-  useEffect(() => {
-    localStorage.setItem("basket", JSON.stringify(basket));
-  }, [basket]);
+
 
   const DJANGO_SERVER = "http://127.0.0.1:8000";
-  let cardList = [];
+
 
 
   useEffect(() => {
+    localStorage.setItem("basket", JSON.stringify(basket));
     fetch(DJANGO_SERVER + "/api/cards/")
       .then((res) => res.json())
       .then((data) => {
@@ -36,6 +37,7 @@ export default function App() {
             price: c.price,
             description: c.description,
             created_at: formattedDate,
+            user_id: c.user_id,
           }
         });
         setCards(cardList);
@@ -43,10 +45,52 @@ export default function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, [isAddedToggle, isPopulate]);
+  }, [isAddedToggle, isPopulate, basket]);
 
-  const addToBasket = (card) => {
-    setBasket((prevBasket) => [...prevBasket, card]);
+  const verifyToken = async (token) => {
+    try {
+      const response = await fetch(DJANGO_SERVER + "/api/auth/verify-token", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": `Token ${token}`,
+        },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return { isValid: data.isValid, userId: data.userId }; // Return both isValid and userId
+    } else {
+      return { isValid: false, userId: null };
+    }
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return { isValid: false, userId: null };
+  }
+};
+  const addToBasket = async (card) => {
+    const userToken = localStorage.getItem("userToken");
+    console.log(card)
+    if (!userToken) {
+      console.log("No user is logged in", userToken);
+      return;
+    }
+
+    const { isValid, userId } = await verifyToken(userToken);
+    if (!isValid) {
+      console.log("Token is not valid", isValid);
+      return;
+    }
+
+    if (card.user_id === userId) {
+      console.log('User cannot add their own items to the basket.');
+      return;
+    }
+
+    setBasket((prevBasket) => {
+      const updatedBasket = [...prevBasket, card];
+      localStorage.setItem("basket", JSON.stringify(updatedBasket));
+      return updatedBasket;
+    });
   };
 
   const removeFromBasket = (card) => {
@@ -59,7 +103,9 @@ export default function App() {
 
   const addCardToList = (event) => {
     event.preventDefault();
-    const card = inputRef.current.value;
+    const card = titleRef.current.value;
+    const description = descriptionRef.current.value;
+    const price = priceRef.current.value;
     const userToken = localStorage.getItem("userToken");
 
     fetch(DJANGO_SERVER + "/api/cards/", {
@@ -67,12 +113,14 @@ export default function App() {
       headers: {
         "Authorization": `Token ${userToken}`,
         "Content-type": "application/json" },
-      body: JSON.stringify({ color: card, description: "test", price: "3"}),
-    }).then((resp) => {
+      body: JSON.stringify({ color: card, description: description, price: price}),
+    }).then(() => {
       setAdded(!isAddedToggle);
     });
 
-    inputRef.current.value = "";
+    titleRef.current.value = "";
+    descriptionRef.current.value = "";
+    priceRef.current.value = "";
   };
 
   function populateDB() {
@@ -110,8 +158,20 @@ export default function App() {
               <div>
                 <form onSubmit={addCardToList}>
                   <input
-                    ref={inputRef}
-                    placeholder="Enter Card Color"
+                    ref={titleRef}
+                    placeholder="Enter Card Title"
+                    required
+                  />
+                  <br></br>
+                  <input
+                    ref={descriptionRef}
+                    placeholder="Enter Card Description"
+                    required
+                  />
+                  <br></br>
+                  <input
+                    ref={priceRef}
+                    placeholder="Enter Card Price"
                     required
                   />
                   <br></br>

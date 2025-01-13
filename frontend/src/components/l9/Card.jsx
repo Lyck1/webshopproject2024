@@ -31,7 +31,14 @@ export default function Card(props) {
   };
 
   function addToBasket() {
-    props.addToBasket(props.color);
+    const card = {
+      color: props.color,
+      price: props.price,
+      description: props.description,
+      created_at: props.created_at,
+      user_id: props.user_id,
+    }
+    props.addToBasket(card);
     setAdd(true);
   }
 

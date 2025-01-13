@@ -7,9 +7,9 @@ function Basket({ basketItems, removeFromBasket, clearBasket }) {
       {basketItems?.length === 0 ? (
         <p>Your basket is empty!</p>
       ) : (
-        basketItems?.map((item) => (
-          <div key={item} style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
-            <span>{item}</span>
+        basketItems?.map((item, index) => (
+          <div key={index} style={{ borderBottom: '1px solid #ccc', padding: '5px' }}>
+            <span>{item.color} - {item.price} - {item.description}</span>
             <button onClick={() => removeFromBasket(item)} style={{ marginLeft: '10px' }}>Remove</button>
           </div>
         ))
@@ -22,3 +22,4 @@ function Basket({ basketItems, removeFromBasket, clearBasket }) {
 }
 
 export default Basket;
+
