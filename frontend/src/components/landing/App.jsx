@@ -159,10 +159,8 @@ export default function App() {
         ) : (
           <button onClick={populateDB}>Populate DB</button>
         )}
-        {isPopulate ? (
-            <p style={{color: "red"}}>Info is not populated</p>
-        ) : (
-            <button onClick={depopulateDB}>Depopulate DB</button>
+        {(
+            <button onClick={(depopulateDB)}>Depopulate DB</button>
         )}
       </nav>
 

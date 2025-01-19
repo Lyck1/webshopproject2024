@@ -5,6 +5,8 @@ import './App.css' // importing in the root applies to all children
 import App9 from './components/landing/App.jsx'
 import Login from './components/login/App.jsx'
 import Signup from './components/signup/App.jsx'
+import Account from './components/account/App.jsx'
+import MyItems from './components/myitems/App.jsx'
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 
 
@@ -26,11 +28,14 @@ createRoot(document.getElementById('root')).render(
             <li>
                 <Link to="/signup"> Sign up</Link>
             </li>
+            <li>
+                <Link to="/myitems"> My Items </Link>
+            </li>
         </ul>
     </nav>
         <Routes>
-            {/*<Route path="/myitems" element={}></Route>
-                <Route path="/account/*" element={}></Route>*/}
+            <Route path="/myitems" element={MyItems}></Route>
+            <Route path="/account/*" element={Account}></Route>
             <Route path="/signup/*" element={<Signup/>}></Route>
             <Route path='/login/*' element={<Login/>}></Route>
             <Route path='/*' strict element={<App9/>}></Route>
