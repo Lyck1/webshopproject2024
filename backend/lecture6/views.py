@@ -56,6 +56,10 @@ class CardDetailAPIView(APIView):
         card.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['POST'])
+def depopulate_api(request):
+    User.objects.all().delete()
+    return Response({"message": "users have been deleted"})
 
 @api_view(['POST'])
 def populate_users_with_cards_api(request):

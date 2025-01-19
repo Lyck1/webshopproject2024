@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Basket from "./Basket";
 import { useRef } from "react";
-import CardContainer from "../l9/CardContainer";
+import CardContainer from ".//CardContainer";
 
 export default function App() {
   const [cards, setCards] = useState([]);
@@ -135,6 +135,18 @@ export default function App() {
     });
   }
 
+  function  depopulateDB(){
+    fetch(DJANGO_SERVER + "/api/depopulate/", {
+      method: "post",
+      headers: {"Content-type": "application/json" },
+      body: {},
+    }).then((resp) => {
+      if (resp.status === 200) {
+        setPopulate(false);
+      }
+    })
+  }
+
   return (
     <div style={{ padding: "20px" }}>
       <nav>
@@ -147,11 +159,16 @@ export default function App() {
         ) : (
           <button onClick={populateDB}>Populate DB</button>
         )}
+        {isPopulate ? (
+            <p style={{color: "red"}}>Info is not populated</p>
+        ) : (
+            <button onClick={depopulateDB}>Depopulate DB</button>
+        )}
       </nav>
 
       <Routes>
         <Route
-          path="/"
+            path="/"
           element={
             <div>
               <h3>Add a Card</h3>

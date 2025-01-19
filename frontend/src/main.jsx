@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import './App.css' // importing in the root applies to all children
-import App9 from './components/l9/App.jsx'
+import App9 from './components/landing/App.jsx'
 import Login from './components/login/App.jsx'
 import Signup from './components/signup/App.jsx'
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'

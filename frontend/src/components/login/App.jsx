@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Basket from "./Basket";
 import { useRef } from "react";
-import CardContainer from "../l9/CardContainer";
+import CardContainer from "../landing/CardContainer";
 
 export default function App() {
   let usernameRef = useRef(null);
@@ -16,6 +16,7 @@ export default function App() {
       const username = usernameRef.current.value;
       const password = passwordRef.current.value;
 
+
       fetch(DJANGO_LOCAL + "/api/auth/login/", {
           method: "POST",
           headers: { "Content-type": "application/json" },
@@ -24,12 +25,36 @@ export default function App() {
             return resp.json();
       }).then((data) => {
           localStorage.setItem("userToken", data.token);
+          verifyToken(data.token).then()
+          localStorage.setItem("userName", username);
       }).catch((error) => {
           console.error("Error:", error);
       })
       usernameRef.current.value = "";
       passwordRef.current.value = "";
   }
+
+  const verifyToken = async (token) => {
+    try {
+      const response = await fetch(DJANGO_SERVER + "/api/auth/verify-token", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": `Token ${token}`,
+        },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem("userId", data.userId);
+
+    } else {
+
+    }
+  } catch (error) {
+    console.error('Error verifying token:', error);
+
+  }
+};
 
     return (
         <div style={{padding: "20px"}}>

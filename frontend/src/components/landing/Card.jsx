@@ -7,12 +7,13 @@ export default function Card(props) {
 
   useEffect(() => {
     const items = props.basketItems;
-    if (items?.find((a) => a === props.color)) {
+    const userID = localStorage.getItem("userId");
+    if (items?.find((a) => a.color === props.color) || props.user_id === userID) {
       setAdd(true);
     } else {
       setAdd(false);
     }
-  }, [props.basketItems]);
+  }, [props.basketItems, props.color, props.user_id]);
 
   const cardStyle = {
     width: "150px",
@@ -37,7 +38,7 @@ export default function Card(props) {
       description: props.description,
       created_at: props.created_at,
       user_id: props.user_id,
-    }
+    };
     props.addToBasket(card);
     setAdd(true);
   }
@@ -46,7 +47,7 @@ export default function Card(props) {
     <div style={cardContainerStyle}>
       <div style={cardStyle}>
         <Square sColor={props.color ? props.color.split('_').pop() : 'defaultColor'} />
-        <Label lColor={props.color} price={props.price} descr={props.description} createdAt={props.created_at}/>
+        <Label lColor={props.color} price={props.price} descr={props.description} createdAt={props.created_at} />
       </div>
       {isAdded ? (
         <p style={{ color: "green" }}>Card Added</p>
@@ -54,6 +55,7 @@ export default function Card(props) {
         <button
           onClick={addToBasket}
           style={{ backgroundColor: "black", color: "white" }}
+          disabled={props.user_id.toString() === localStorage.getItem("userId")}
         >
           Add to Basket
         </button>
